@@ -1,4 +1,6 @@
 // https://adventofcode.com/2022/day/1
-const input = inputs.input1.split('\n\n').map((item) => item.split('\n'))
+import { map, sumBy, flow, max, split } from 'lodash/fp'
 
-export default Math.max(...input.map((item) => item.reduce((acc, curr) => acc + Number(curr), 0)))
+const input = flow([split('\n\n'), map(split('\n'))])(inputs.input1)
+
+export default flow([map(sumBy(Number)), max])(input)
