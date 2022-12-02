@@ -45,9 +45,58 @@ const rules: Record<EFriendSign, Record<EEnemySign, EResultCost>> = {
 const input = flow([split('\n'), map(split(' '))])(inputs.input2)
 
 const getActionCost = (sign: EActionCost) => EActionCost[sign]
-const getRoundCost = ([enemy, friend]: [EEnemySign, EFriendSign]) => rules[friend][enemy]
+const getRoundCost = ([enemy, friend]: [EEnemySign, EFriendSign]) =>
+  rules[friend][enemy]
 
-const amountOfSigns = flow([map(tail), flatten, map(getActionCost), sum])(input)
-const amountOfRounds = flow([map(getRoundCost), sum])(input)
+const sumOfSigns = flow([map(tail), flatten, map(getActionCost), sum])(input)
+const sumOfRounds = flow([map(getRoundCost), sum])(input)
+const output = sum([sumOfSigns, sumOfRounds])
 
-export default sum([amountOfSigns, amountOfRounds])
+/* PART 2 */
+
+enum EStrategy {
+  LOST = 'X',
+  DRAW = 'Y',
+  WON = 'Z',
+}
+
+const strategyRules: Record<EStrategy, Record<EEnemySign, EFriendSign>> = {
+  [EStrategy.LOST]: {
+    [EEnemySign.A]: EFriendSign.Z,
+    [EEnemySign.B]: EFriendSign.X,
+    [EEnemySign.C]: EFriendSign.Y,
+  },
+  [EStrategy.WON]: {
+    [EEnemySign.A]: EFriendSign.Y,
+    [EEnemySign.B]: EFriendSign.Z,
+    [EEnemySign.C]: EFriendSign.X,
+  },
+  [EStrategy.DRAW]: {
+    [EEnemySign.A]: EFriendSign.X,
+    [EEnemySign.B]: EFriendSign.Y,
+    [EEnemySign.C]: EFriendSign.Z,
+  },
+}
+
+const getSignByStrategy = ([enemy, strategy]: [EEnemySign, EStrategy]) => [
+  enemy,
+  strategyRules[strategy][enemy],
+]
+
+const sumOfSignsStrategy = flow([
+  map(getSignByStrategy),
+  map(tail),
+  flatten,
+  map(getActionCost),
+  sum,
+])(input)
+
+const sumOfRoundsStrategy = flow([
+  map(getSignByStrategy),
+  map(getRoundCost),
+  sum,
+])(input)
+
+const outputStrategy = sum([sumOfSignsStrategy, sumOfRoundsStrategy])
+
+export default `${output} ${outputStrategy}`
