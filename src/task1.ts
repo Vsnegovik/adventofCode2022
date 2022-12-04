@@ -7,11 +7,11 @@ const output = flow([map(sumBy(Number)), max])(input)
 
 /* PART 2 */
 
-const outputMany = flow([
+const output2 = flow([
   map(sumBy(Number)),
   sortBy((x) => x),
   takeRight(3),
   sumBy(Number),
 ])(input)
 
-export default `${output} ${outputMany}`
+export default [output, output2]

@@ -97,6 +97,6 @@ const sumOfRoundsStrategy = flow([
   sum,
 ])(input)
 
-const outputStrategy = sum([sumOfSignsStrategy, sumOfRoundsStrategy])
+const output2 = sum([sumOfSignsStrategy, sumOfRoundsStrategy])
 
-export default `${output} ${outputStrategy}`
+export default [output, output2]
