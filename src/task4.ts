@@ -17,4 +17,14 @@ const output = flow([
   size,
 ])(input)
 
-export default [output]
+/* PART 2 */
+
+const output2 = flow([
+  map(flatten),
+  map(map(Number)),
+  map(([fromA, toA, fromB, toB]) => !(fromA > toB || toA < fromB)),
+  compact,
+  size,
+])(input)
+
+export default [output, output2]
