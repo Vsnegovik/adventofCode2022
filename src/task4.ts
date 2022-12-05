@@ -8,8 +8,11 @@ const input = flow([split('\n'), map(split(',')), map(map(split('-')))])(
 
 const output = flow([
   map(flatten),
-  map(([fromA, toA, fromB, toB]) => [fromA - fromB, toA - toB]),
-  map(([from, to]) => (from <= 0 && to >= 0) || (from >= 0 && to <= 0)),
+  map(map(Number)),
+  map(
+    ([fromA, toA, fromB, toB]) =>
+      (fromA >= fromB && toA <= toB) || (fromA <= fromB && toA >= toB),
+  ),
   compact,
   size,
 ])(input)
