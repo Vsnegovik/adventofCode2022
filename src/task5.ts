@@ -43,7 +43,7 @@ flow([
     crates[to - 1] = flow([
       nth(from - 1),
       takeRight(move),
-      reverse,
+      reverse, // only for part 1. Need refactor
       concat(crates[to - 1]),
     ])(crates)
     crates[from - 1] = dropRight(move)(crates[from - 1])
