@@ -33,6 +33,9 @@ const crates = flow([
   map(compact),
 ])(inputs.input5)
 
+const crates1 = JSON.parse(JSON.stringify(crates))
+const crates2 = JSON.parse(JSON.stringify(crates))
+
 flow([
   split('\n'),
   drop(10),
@@ -40,16 +43,33 @@ flow([
   map(split(' ')),
   map(map(parseInt(10))),
   each(([move, from, to]) => {
-    crates[to - 1] = flow([
+    crates1[to - 1] = flow([
       nth(from - 1),
       takeRight(move),
-      reverse, // only for part 1. Need refactor
-      concat(crates[to - 1]),
-    ])(crates)
-    crates[from - 1] = dropRight(move)(crates[from - 1])
+      reverse,
+      concat(crates1[to - 1]),
+    ])(crates1)
+    crates1[from - 1] = dropRight(move)(crates1[from - 1])
   }),
 ])(inputs.input5)
 
-const output = flow([map(last), join('')])(crates)
+flow([
+  split('\n'),
+  drop(10),
+  map(replace(/(move |from |to )/g, '')),
+  map(split(' ')),
+  map(map(parseInt(10))),
+  each(([move, from, to]) => {
+    crates2[to - 1] = flow([
+      nth(from - 1),
+      takeRight(move),
+      concat(crates2[to - 1]),
+    ])(crates2)
+    crates2[from - 1] = dropRight(move)(crates2[from - 1])
+  }),
+])(inputs.input5)
 
-export default [output]
+const output = flow([map(last), join('')])(crates1)
+const output2 = flow([map(last), join('')])(crates2)
+
+export default [output, output2]
